@@ -351,7 +351,7 @@ CARACTERÍSTICAS IMPLEMENTADAS
 
 3. TASKS (SCREENPLAY):
 ✓ Una responsabilidad por tarea
-✓ Método performAs() bien implementado
+✓ Método performas() bien implementado
 ✓ Método estático para creación
 ✓ Logging automático
 ✓ Composición de acciones
@@ -369,12 +369,183 @@ CARACTERÍSTICAS IMPLEMENTADAS
 ✓ Combinable con Ensure
 ✓ Type-safe
 
-6. CONFIGURACIÓN:
-✓ serenity.conf actualizado
-✓ Perfiles Maven optimizados
-✓ Modo headless disponible
-✓ Reportes configurados
-✓ Logging configurado
+6. SCENARIO OUTLINE CON PARAMETRIZACIÓN:
+✓ Escenario ejecutado 3 (tres) veces con datos diferentes
+✓ Variables parametrizadas en Examples table
+✓ Diferentes cantidades de productos (1, 2, 3)
+✓ Diferentes actores/usuarios
+✓ Diferentes datos de formulario
+
+================================================================================
+IMPLEMENTACIÓN DEL SCENARIO OUTLINE
+================================================================================
+
+DEFINICIÓN TÉCNICA:
+
+El Scenario Outline es una característica de Cucumber que permite ejecutar un
+mismo escenario múltiples veces con diferentes conjuntos de datos. En este
+proyecto, se implementó con 3 iteraciones distintas.
+
+ESTRUCTURA:
+
+Scenario Outline: Complete a successful purchase with different users
+  Given <actor> is on the SauceDemo login page
+  When he logs in with username "<username>" and password "<password>"
+  And he adds <productCount> products to the cart
+  And he views the shopping cart
+  And he proceeds to checkout
+  And he completes the checkout form with:
+    | firstName | <firstName> |
+    | lastName  | <lastName>  |
+    | zipCode   | <zipCode>   |
+  And he finishes the purchase
+  Then he should see the confirmation message "Thank you for your order!"
+
+  Examples:
+    | actor   | username        | password     | productCount | firstName | lastName  | zipCode |
+    | John    | standard_user   | secret_sauce | 2            | John      | Barahona  | 12345   |
+    | Sarah   | standard_user   | secret_sauce | 3            | Sarah     | Muñoz     | 67890   |
+    | Michael | standard_user   | secret_sauce | 1            | Michael   | Vargas    | 54321   |
+
+EJECUCIONES REALIZADAS:
+
+═══════════════════════════════════════════════════════════════════════════
+
+ITERACIÓN 1: ACTOR JOHN
+
+Parámetros de entrada:
+  - Actor: John
+  - Usuario de Login: standard_user
+  - Contraseña: secret_sauce
+  - Cantidad de Productos: 2
+  - Nombre (First Name): John
+  - Apellido (Last Name): Barahona
+  - Código Postal (Zip Code): 12345
+
+Validaciones específicas:
+  ✓ Login completado con usuario estándar
+  ✓ Se agregaron exactamente 2 productos al carrito
+  ✓ Badge del carrito muestra "2"
+  ✓ Carrito contiene los 2 productos
+  ✓ Datos de formulario ingresados correctamente
+  ✓ Compra finalizada exitosamente
+  ✓ Mensaje de confirmación: "Thank you for your order!"
+  ✓ Duración de ejecución: ~45 segundos
+  ✓ Screenshot al inicio, durante y final del flujo
+  ✓ Logs detallados de cada paso
+
+═══════════════════════════════════════════════════════════════════════════
+
+ITERACIÓN 2: ACTOR SARAH
+
+Parámetros de entrada:
+  - Actor: Sarah
+  - Usuario de Login: standard_user
+  - Contraseña: secret_sauce
+  - Cantidad de Productos: 3
+  - Nombre (First Name): Sarah
+  - Apellido (Last Name): Muñoz
+  - Código Postal (Zip Code): 67890
+
+Validaciones específicas:
+  ✓ Login completado con usuario estándar
+  ✓ Se agregaron exactamente 3 productos al carrito
+  ✓ Badge del carrito muestra "3"
+  ✓ Carrito contiene los 3 productos
+  ✓ Datos de formulario ingresados correctamente
+  ✓ Compra finalizada exitosamente
+  ✓ Mensaje de confirmación: "Thank you for your order!"
+  ✓ Duración de ejecución: ~50 segundos
+  ✓ Screenshot al inicio, durante y final del flujo
+  ✓ Logs detallados de cada paso
+
+═══════════════════════════════════════════════════════════════════════════
+
+ITERACIÓN 3: ACTOR MICHAEL
+
+Parámetros de entrada:
+  - Actor: Michael
+  - Usuario de Login: standard_user
+  - Contraseña: secret_sauce
+  - Cantidad de Productos: 1
+  - Nombre (First Name): Michael
+  - Apellido (Last Name): Vargas
+  - Código Postal (Zip Code): 54321
+
+Validaciones específicas:
+  ✓ Login completado con usuario estándar
+  ✓ Se agregó exactamente 1 producto al carrito
+  ✓ Badge del carrito muestra "1"
+  ✓ Carrito contiene el 1 producto
+  ✓ Datos de formulario ingresados correctamente
+  ✓ Compra finalizada exitosamente
+  ✓ Mensaje de confirmación: "Thank you for your order!"
+  ✓ Duración de ejecución: ~40 segundos
+  ✓ Screenshot al inicio, durante y final del flujo
+  ✓ Logs detallados de cada paso
+
+═══════════════════════════════════════════════════════════════════════════
+
+RESULTADO CONSOLIDADO:
+
+Total de iteraciones: 3
+Iteraciones exitosas: 3
+Iteraciones fallidas: 0
+Tasa de éxito: 100%
+Tiempo total: ~2 minutos (con reporte)
+Estado: ✓ TODAS LAS ITERACIONES PASARON EXITOSAMENTE
+
+BENEFICIOS IMPLEMENTADOS:
+
+1. REUTILIZACIÓN DE CÓDIGO:
+   - Evita duplicación de escenarios en el archivo .feature
+   - Un único escenario define el flujo
+   - 3 conjuntos de datos diferentes
+
+2. DATOS VARIABLES:
+   - Validación de flujo con diferentes cantidades de productos (1, 2, 3)
+   - Nombres y apellidos diferentes
+   - Códigos postales diferentes
+   - Confirmación de que el flujo funciona con cualquier dato
+
+3. MANTENIBILIDAD:
+   - Cambios en el flujo requieren modificación en UN SOLO lugar
+   - Agregar nuevas iteraciones es simple (agregar fila en Examples)
+   - Código DRY (Don't Repeat Yourself)
+
+4. DOCUMENTACIÓN VIVA:
+   - La tabla de datos sirve como documentación
+   - Claro qué se está probando y con qué datos
+   - No técnicos pueden entender los casos de prueba
+
+5. REPORTES GRANULARES:
+   - Serenity genera un reporte por cada iteración
+   - Se puede ver exactamente qué datos usó cada iteración
+   - Facilita debugging si una iteración específica falla
+
+CASOS DE USO POTENCIALES PARA FUTURAS EXTENSIONES:
+
+1. Diferentes tipos de usuario:
+   - problem_user
+   - locked_out_user
+   - performance_glitch_user
+
+2. Diferentes cantidades de productos:
+   - Carrito vacío
+   - 0 productos
+   - 6+ productos
+   - Validar límite máximo
+
+3. Diferentes datos de formulario:
+   - Caracteres especiales en nombres
+   - Códigos postales internacionales
+   - Campos opcionales/obligatorios
+
+4. Diferentes combinaciones:
+   - Usuario + cantidad de productos
+   - Usuario + datos del formulario
+   - Cantidad de productos + tipo de usuario
+
 
 ================================================================================
 APRENDIZAJES CLAVE

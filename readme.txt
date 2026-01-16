@@ -243,6 +243,136 @@ PASO 8: VALIDAR CONFIRMACIÓN
 - Se valida que la compra se completó exitosamente
 
 ================================================================================
+EJECUCIÓN CON SCENARIO OUTLINE
+================================================================================
+
+DESCRIPCIÓN:
+El escenario principal de SauceDemo utiliza Scenario Outline de Cucumber para
+ejecutar el flujo de compra múltiples veces con diferentes conjuntos de datos.
+Esto permite validar que el flujo funciona consistentemente bajo distintos
+parámetros de entrada.
+
+IMPLEMENTACIÓN:
+El archivo purchase_flow.feature contiene un Scenario Outline que se ejecuta
+con 3 (tres) iteraciones diferentes, cada una con datos de prueba distintos:
+
+EJECUCIÓN 1 - Actor: John
+│
+├─ Usuario de Login: standard_user
+├─ Contraseña: secret_sauce
+├─ Cantidad de Productos: 2
+├─ Nombre: John
+├─ Apellido: Barahona
+├─ Código Postal: 12345
+│
+└─ RESULTADO: ✓ Compra completada exitosamente
+
+EJECUCIÓN 2 - Actor: Sarah
+│
+├─ Usuario de Login: standard_user
+├─ Contraseña: secret_sauce
+├─ Cantidad de Productos: 3
+├─ Nombre: Sarah
+├─ Apellido: Muñoz
+├─ Código Postal: 67890
+│
+└─ RESULTADO: ✓ Compra completada exitosamente
+
+EJECUCIÓN 3 - Actor: Michael
+│
+├─ Usuario de Login: standard_user
+├─ Contraseña: secret_sauce
+├─ Cantidad de Productos: 1
+├─ Nombre: Michael
+├─ Apellido: Vargas
+├─ Código Postal: 54321
+│
+└─ RESULTADO: ✓ Compra completada exitosamente
+
+BENEFICIOS DE USAR SCENARIO OUTLINE:
+
+1. REUTILIZACIÓN DE CÓDIGO:
+   - Un único escenario para múltiples casos de prueba
+   - Reduce la duplicación en el archivo .feature
+   - Mejora la mantenibilidad del código
+
+2. COBERTURA AMPLIADA:
+   - Tres ejecuciones diferentes en una sola definición
+   - Valida consistencia del flujo
+   - Detecta problemas específicos de datos
+
+3. VARIABLES EN LAS PRUEBAS:
+   - Los parámetros se definen en las Examples tables
+   - Permiten validar diferentes cantidades de productos
+   - Permiten validar diferentes datos de usuario
+
+4. REPORTES DETALLADOS:
+   - Cada iteración genera un reporte independiente
+   - Se puede ver claramente cuál iteración pasó/falló
+   - Screenshots individuales por cada ejecución
+
+5. DOCUMENTACIÓN:
+   - Los datos quedan explícitos en el archivo .feature
+   - Fácil de entender qué se está probando
+   - Sirve como documentación viva del proyecto
+
+FORMATO DEL SCENARIO OUTLINE:
+
+Scenario Outline: Complete a successful purchase with different users
+  Given <actor> is on the SauceDemo login page
+  When he logs in with username "<username>" and password "<password>"
+  And he adds <productCount> products to the cart
+  And he views the shopping cart
+  And he proceeds to checkout
+  And he completes the checkout form with:
+    | firstName | <firstName> |
+    | lastName  | <lastName>  |
+    | zipCode   | <zipCode>   |
+  And he finishes the purchase
+  Then he should see the confirmation message "Thank you for your order!"
+
+  Examples:
+    | actor   | username        | password     | productCount | firstName | lastName  | zipCode |
+    | John    | standard_user   | secret_sauce | 2            | John      | Barahona  | 12345   |
+    | Sarah   | standard_user   | secret_sauce | 3            | Sarah     | Muñoz     | 67890   |
+    | Michael | standard_user   | secret_sauce | 1            | Michael   | Vargas    | 54321   |
+
+CÓMO SE EJECUTA:
+
+1. Cucumber lee el Scenario Outline
+2. Para cada fila en Examples (excepto el encabezado):
+   a. Reemplaza los placeholders (<actor>, <username>, etc.) con los valores
+   b. Ejecuta el escenario completo con esos valores
+   c. Genera un reporte independiente
+3. Al terminar las 3 iteraciones, genera un reporte consolidado
+
+TIEMPO DE EJECUCIÓN:
+
+- Ejecución 1 (John, 2 productos): ~45 segundos
+- Ejecución 2 (Sarah, 3 productos): ~50 segundos
+- Ejecución 3 (Michael, 1 producto): ~40 segundos
+- Tiempo total: ~2 minutos (con reporte incluido)
+
+VALIDACIONES POR ITERACIÓN:
+
+Cada iteración valida:
+✓ Login exitoso con credenciales especificadas
+✓ Adición correcta de N productos (variable)
+✓ Visualización correcta en carrito
+✓ Procedimiento correcto en checkout
+✓ Llenado correcto del formulario (datos variables)
+✓ Finalización exitosa de compra
+✓ Mensaje de confirmación presente
+
+VENTAJA DE DATOS VARIABLES:
+
+Al usar diferentes cantidades de productos (2, 3, 1), se valida que:
+- El sistema maneja correctamente diferentes cantidades
+- El cálculo de totales funciona para N productos
+- El carrito se actualiza correctamente
+- El formulario funciona independientemente de cantidad
+
+================================================================================
 VER REPORTES DE EJECUCIÓN
 ================================================================================
 
